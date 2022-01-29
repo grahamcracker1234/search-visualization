@@ -1,5 +1,7 @@
 import gridDraw from "./gridRenderer.js";
 import Canvas from "./canvas.js";
+import { wait, matrixGen, find, equal, Stack } from "./util.js";
+
 
 let canvas;
 let context;
@@ -19,15 +21,16 @@ const update = () => {
 	context.fillRect(-canvas.width / 2, -canvas.height / 2, canvas.width, canvas.height);
 
 	const grid = [
-		[2, 1, 1, 1, 0], 
-		[0, 0, 1, 1, 0], 
-		[1, 0, 0, 0, 1],
-		[1, 0, 0, 0, 3]
+		"21     ",
+		" 1 111 ",
+		" 1 1 1 ",
+		"     13"
 	];
-	gridDraw(context, grid);
+
+	gridDraw(context, matrixGen(grid));
 
 	// Draw next frame.
-	requestAnimationFrame(() => update());
+	// requestAnimationFrame(() => update());
 };
 
 (() => {

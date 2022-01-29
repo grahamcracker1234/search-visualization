@@ -7,11 +7,8 @@ const wait = (millis) => {
 };
 
 const matrixGen = (grid) => {
-	const matrix = [];
-	for (let row of grid) {
-		matrix.push(row.split(""));
-	}
-	return matrix;
+	grid = grid.map(row => row.replace(/\ /g, "0"));
+	return grid.map(row => row.split("").map(c => parseInt(c)));
 };
 
 const find = (matrix, state) => {
