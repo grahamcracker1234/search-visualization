@@ -2,6 +2,8 @@ import gridDraw from "./gridRenderer.js";
 import Canvas from "./canvas.js";
 import { wait, matrixGen, find, equal, Stack } from "./util.js";
 
+import depthFirstSearch from "./algorithms.js";
+
 
 let canvas;
 let context;
@@ -15,25 +17,27 @@ const setup = () => {
 	document.body.appendChild(canvas);
 };
 
-const update = () => {
+const update = (frame) => {
 	// Reset frame.
 	context.fillStyle = "#000";
 	context.fillRect(-canvas.width / 2, -canvas.height / 2, canvas.width, canvas.height);
 
-	const grid = [
+	let grid = [
 		"21     ",
 		" 1 111 ",
 		" 1 1 1 ",
 		"     13"
 	];
-
-	gridDraw(context, matrixGen(grid));
+	grid = matrixGen(grid);
+	const path = depthFirstSearch(grid);
+	
+	gridDraw(context, grid, path, frame);
 
 	// Draw next frame.
-	// requestAnimationFrame(() => update());
+	requestAnimationFrame(() => update(frame + 1));
 };
 
 (() => {
 	setup();
-	update();
+	update(0);
 })();

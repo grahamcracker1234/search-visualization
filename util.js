@@ -7,7 +7,7 @@ const wait = (millis) => {
 };
 
 const matrixGen = (grid) => {
-	grid = grid.map(row => row.replace(/\ /g, "0"));
+	grid = grid.map(row => row.replace(/ /g, "0"));
 	return grid.map(row => row.split("").map(c => parseInt(c)));
 };
 
