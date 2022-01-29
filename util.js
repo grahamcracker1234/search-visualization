@@ -45,4 +45,25 @@ class Stack {
 	}
 }
 
-export { wait, matrixGen, find, equal, Stack }; 
+class Queue {
+	constructor() {
+		this.queue = [];
+	}
+	push(element) {
+		this.queue.splice( 0, 0, element );
+	}
+
+	pop() {
+		return this.queue.pop();
+	}
+
+	isEmpty() {
+		return this.queue.length === 0;
+	}
+
+	print() {
+		console.log(this.queue);
+	}
+}
+
+export { wait, matrixGen, find, equal, Stack, Queue }; 
