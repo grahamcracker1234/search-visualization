@@ -1,25 +1,6 @@
-import {matrixGen, find, equal} from "./matrixOperations.js";
+import { wait, matrixGen, find, equal, Stack } from "./util.js";
 
-class Stack {
-	constructor() {
-		this.stack = [];
-	}
-	push(element) {
-		this.stack.push(element);
-	}
 
-	pop() {
-		return this.stack.pop();
-	}
-
-	isEmpty() {
-		return this.stack.length === 0;
-	}
-
-	print() {
-		console.log(this.stack);
-	}
-}
 // const grid = [
 // 	"A00",
 // 	"00S"
