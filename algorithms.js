@@ -25,8 +25,22 @@ export const depthFirstSearch = (matrix) => {
 	const stack = Stack();
 	// get the starting point
 	let startState = [0,0];
-	stack.push(startState);
-	dfs(matrix, stack);
+	stack.push([startState, []]);
+	const visited = [];
+
+	while (!stack.isEmpty()) {
+		const [state, path] = stack.pop();
+		if (visited.includes(state)) continue;
+		visited.push(state);
+
+		if (state === goal) break;
+		const neighbors = getNeighbors(matrix, state[0], state[1]);
+		for(const neighbor in neighbors) {
+			if (visited.includes(neighbor)) continue;
+			stack.push([neighbor, path + [state]]);
+		}
+
+	}
 };
 
 const getNeighbors = (matrix, x, y) => {
@@ -48,21 +62,4 @@ const getNeighbors = (matrix, x, y) => {
 		neighbors.push([x+1, y]);
 	}
 	return neighbors;
-};
-
-const dfs = (matrix, stack)=> {
-	const visited = [];
-	while (!stack.isEmpty()) {
-		const state = stack.pop();
-		if (visited.includes(state)) continue;
-		visited.push(state);
-
-		if (state === goal) break;
-		const neighbors = getNeighbors(matrix, state[0], state[1]);
-		for(const neighbor in neighbors) {
-			if (visited.includes(neighbor)) continue;
-			stack.push(neighbor);
-		}
-
-	}
 };
