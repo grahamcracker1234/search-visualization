@@ -1,4 +1,4 @@
-import {matrixGen, find} from "./matrixOperations.js";
+import {matrixGen, find, equal} from "./matrixOperations.js";
 
 class Stack {
 	constructor() {
@@ -15,54 +15,62 @@ class Stack {
 	isEmpty() {
 		return this.stack.length === 0;
 	}
+
+	print() {
+		console.log(this.stack);
+	}
 }
 // const grid = [
 // 	"A00",
 // 	"00S"
 // ];
 // const matrix = matrixGen(grid);
-// const start = find(matrix, "A");
-// const goal = find(matrix, "S");
+const matrix = [
+	[2, 0],
+	[1, 0],
+	[3, 0]
+];
+const start = find(matrix, 2);
+const goal = find(matrix, 3);
 
-export const depthFirstSearch = (matrix) => {
-	const stack = Stack();
+const depthFirstSearch = (matrix) => {
+	const stack = new Stack();
 	// get the starting point
-	let startState = [0,0];
-	stack.push([startState, []]);
+	stack.push([start, []]);
 	const visited = [];
-
 	while (!stack.isEmpty()) {
 		const [state, path] = stack.pop();
-		if (visited.includes(state)) continue;
+		if (visited.find(pos => (pos[0] === state[0] && pos[1] === state[1]))) continue;
 		visited.push(state);
-
-		if (state === goal) break;
+		if (equal(state, goal)) return [...path, state];
 		const neighbors = getNeighbors(matrix, state[0], state[1]);
-		for(const neighbor in neighbors) {
-			if (visited.includes(neighbor)) continue;
-			stack.push([neighbor, path + [state]]);
+		for(const neighbor of neighbors) {
+			if (visited.find(pos => (pos[0] === neighbor[0] && pos[1] === neighbor[1]))) continue;
+			stack.push([neighbor, [...path, state]]);
 		}
-
 	}
 };
 
-const getNeighbors = (matrix, x, y) => {
+const getNeighbors = (matrix, row, col) => {
 	const neighbors = [];
 	// check up
-	if (y-1 > 0 && matrix[y-1][x] != 1) {
-		neighbors.push([x, y-1]);
+	if (row-1 >= 0 && matrix[row-1][col] != 1) {
+		neighbors.push([row-1, col]);
 	}
 	// check down
-	if (y+1 < matrix.length && matrix[y+1][x] != 1) {
-		neighbors.push([x, y+1]);
+	if (row+1 < matrix.length && matrix[row+1][col] != 1) {
+		neighbors.push([row+1, col]);
 	}
 	// check left
-	if (x-1 > 0 && matrix[y][x-1] != 1) {
-		neighbors.push([x-1, y]);
+	if (col-1 >= 0 && matrix[row][col-1] != 1) {
+		neighbors.push([row, col-1]);
 	}
 	// check right
-	if (x+1 < matrix[0].length && matrix[y][x+1] != 1) {
-		neighbors.push([x+1, y]);
+	if (col+1 < matrix[0].length && matrix[row][col+1] != 1) {
+		neighbors.push([row, col+1]);
 	}
 	return neighbors;
 };
+(()=> {
+	console.log(depthFirstSearch(matrix));
+})();
