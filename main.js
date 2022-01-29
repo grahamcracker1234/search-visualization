@@ -29,9 +29,10 @@ const update = (frame) => {
 		"     13"
 	];
 	grid = matrixGen(grid);
-	const path = depthFirstSearch(grid);
+	const [path, visited] = depthFirstSearch(grid);
+	// console.log(path);
 	
-	gridDraw(context, grid, path, frame);
+	gridDraw(context, grid, visited, path, frame);
 
 	// Draw next frame.
 	requestAnimationFrame(() => update(frame + 1));
