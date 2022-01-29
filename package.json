@@ -1,0 +1,23 @@
+{
+  "name": "search-visualization",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "serve": "serve"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/grahamcracker1234/search-visualization.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/grahamcracker1234/search-visualization/issues"
+  },
+  "homepage": "https://github.com/grahamcracker1234/search-visualization#readme",
+  "devDependencies": {
+    "eslint": "^8.8.0",
+    "serve": "^13.0.2"
+  }
+}
