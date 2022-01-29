@@ -1,6 +1,4 @@
-/*
-We can start with DFS and BFS
-*/
+import {matrixGen, find} from "./matrixOperations.js";
 
 class Stack {
 	constructor() {
@@ -18,8 +16,13 @@ class Stack {
 		return this.stack.length === 0;
 	}
 }
-
-let goal = [10,10];
+// const grid = [
+// 	"A00",
+// 	"00S"
+// ];
+// const matrix = matrixGen(grid);
+// const start = find(matrix, "A");
+// const goal = find(matrix, "S");
 
 export const depthFirstSearch = (matrix) => {
 	const stack = Stack();
