@@ -2,7 +2,7 @@ import gridDraw from "./gridRenderer.js";
 import Canvas from "./canvas.js";
 import { wait, matrixGen, find, equal, Stack } from "./util.js";
 
-import depthFirstSearch from "./algorithms.js";
+import {depthFirstSearch, breadthFirstSearch} from "./algorithms.js";
 
 
 let canvas;
@@ -23,9 +23,9 @@ const update = (frame) => {
 	context.fillRect(-canvas.width / 2, -canvas.height / 2, canvas.width, canvas.height);
 
 	let grid = [
-		"21     ",
+		"20     ",
 		" 1 111 ",
-		" 1 1 1 ",
+		" 0 1 1 ",
 		"     13"
 	];
 	grid = matrixGen(grid);
