@@ -10,7 +10,7 @@ const Canvas = () => {
 		canvas.style.width = `${width}px`;
 		canvas.style.height = `${height}px`;
 		ctx.scale(ratio, ratio);
-		// ctx.translate(width / 2, height / 2);
+		ctx.translate(width / 2, height / 2);
 	};
 	
 	resize();
@@ -25,26 +25,29 @@ let context;
 const setup = () => {
 	canvas = Canvas();
 	context = canvas.getContext("2d");
-	context.fillStyle = "grey";
+	context.fillStyle = "black";
 	context.fillRect(-canvas.width / 2, -canvas.height / 2, canvas.width, canvas.height);
 
 	document.body.appendChild(canvas);
 };
 
-const grid = () => {
-	const size = 100;
-	const width = 10;
-	const height = 10;
-	context.strokeStyle = "red";
-	// context.translate(width * size / 2, height * size / 2);
+const grid = (width, height) => {
+	const size = Math.floor(Math.min(window.innerWidth / width, window.innerHeight / height));
+	context.translate(-width * size / 2, -height * size / 2);
+
+	context.strokeStyle = "#FF00FF";
+	context.lineWidth = size / 10;
+	context.fillStyle = "#333";
+	
 	for (let x = 0; x < width; x++) {
 		for (let y = 0; y < height; y++) {
 			context.strokeRect(x * size, y * size, size, size);
+			context.fillRect(x * size, y * size, size, size);
 		}
 	}
 };
 
 (() => {
 	setup();
-	grid();
+	grid(15, 10);
 })();
