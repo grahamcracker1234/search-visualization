@@ -1,7 +1,7 @@
 const Canvas = () => {
 	const ratio = window.devicePixelRatio;
 	const canvas = document.createElement("canvas");
-	const ctx = canvas.getContext("2d");
+	const context = canvas.getContext("2d");
 
 	const resize = () => {
 		const [width, height] = [window.innerWidth, window.innerHeight];
@@ -9,8 +9,8 @@ const Canvas = () => {
 		canvas.height = height * ratio;
 		canvas.style.width = `${width}px`;
 		canvas.style.height = `${height}px`;
-		ctx.scale(ratio, ratio);
-		ctx.translate(width / 2, height / 2);
+		context.scale(ratio, ratio);
+		context.translate(width / 2, height / 2);
 	};
 	
 	resize();
