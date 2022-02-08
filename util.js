@@ -1,9 +1,5 @@
 const wait = (millis) => {
-	return new Promise(resolve => {
-		setTimeout(() => {
-			resolve();
-		}, millis);
-	});
+	return new Promise(resolve => setTimeout(resolve, millis));
 };
 
 const equal = (obj1, obj2) => obj1[0] === obj2[0] && obj1[1] === obj2[1];
