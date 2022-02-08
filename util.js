@@ -6,14 +6,6 @@ const wait = (millis) => {
 	});
 };
 
-const find = (matrix, state) => {
-	for(let row = 0; row < matrix.length; row++) {
-		for (let col = 0; col < matrix[row].length; col++) {
-			if (matrix[row][col] === state) return [row, col];
-		}
-	}
-};
-
 const equal = (obj1, obj2) => obj1[0] === obj2[0] && obj1[1] === obj2[1];
 
 class Stack {
@@ -31,6 +23,10 @@ class Stack {
 
 	isEmpty() {
 		return this.stack.length === 0;
+	}
+
+	toArray() {
+		return this.stack;
 	}
 
 	print() {
@@ -55,9 +51,13 @@ class Queue {
 		return this.queue.length === 0;
 	}
 
+	toArray() {
+		return this.queue;
+	}
+
 	print() {
 		console.log(this.queue);
 	}
 }
 
-export { wait, find, equal, Stack, Queue }; 
+export { wait, equal, Stack, Queue };

@@ -1,37 +1,21 @@
-import { generate, draw } from "./grid.js";
 import Canvas from "./canvas.js";
+import { generate, draw } from "./grid.js";
+import { wait } from "./util.js";
 
 // eslint-disable-next-line no-unused-vars
-import { depthFirstSearch, breadthFirstSearch } from "./algorithms.js";
+import { depthFirstSearch, breadthFirstSearch } from "./search.js";
 
-let canvas;
-let context;
-
-const setup = async () => {
-	canvas = Canvas();
-	context = canvas.getContext("2d");
+(async () => {
+	const canvas = Canvas();
+	const context = canvas.getContext("2d");
 	context.fillStyle = "#000";
 	context.fillRect(-canvas.width / 2, -canvas.height / 2, canvas.width, canvas.height);
 
 	document.body.appendChild(canvas);
-	const grid = await generate("gridLayouts/big1");
-	return grid;
-};
+	const grid = await generate("gridLayouts/4");
+	draw(canvas, grid);
 
-const update = (grid, frame = 0) => {
-	// Reset frame.
-	context.fillStyle = "#000";
-	context.fillRect(-canvas.width / 2, -canvas.height / 2, canvas.width, canvas.height);
+	await wait(1000);
 
-	const [path, visited] = breadthFirstSearch(grid);
-	
-	draw(context, grid, visited, path, frame);
-
-	// Draw next frame.
-	requestAnimationFrame(() => update(grid, frame + 1));
-};
-
-(async () => {
-	const grid = await setup();
-	update(grid);
+	depthFirstSearch(grid, canvas);
 })();

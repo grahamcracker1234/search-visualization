@@ -1,13 +1,14 @@
-// eslint-disable-next-line no-unused-vars
-const EMPTY = 0;
-const WALL = 1;
-const START = 2;
-const END = 3;
+const Cell = Object.freeze({
+	EMPTY: 0,
+	WALL: 1,
+	START: 2,
+	END: 3
+});
 
-const generate = async filepath => {
+const generate = async (filepath) => {
 	return fetch(filepath)
 		.then(response => response.text())
-		.then(text => text.replace(/%/g, "1").replace(/S/g, "2").replace(/E/g, "3"))
+		.then(text => text.replace(/%/g, Cell.WALL).replace(/S/g, Cell.START).replace(/E/g, Cell.END))
 		.then(text => text.split(/\n/g))
 		.then(rows => rows.map(row => row.split("").map(cell => parseInt(cell) || 0)))
 		.then(grid => {
@@ -15,9 +16,14 @@ const generate = async filepath => {
 		});
 };
 
-const draw = (context, grid, visited, path, frame) => {
-	const [rowCount, colCount] = [grid.length, grid[0].length];
+const draw = (canvas, grid, frontier = [], visited = [], path = []) => {
+	const	context = canvas.getContext("2d");
 
+	// Clear frame
+	context.fillStyle = "#000";
+	context.fillRect(-canvas.width / 2, -canvas.height / 2, canvas.width, canvas.height);
+
+	const [rowCount, colCount] = [grid.length, grid[0].length];
 	const size = Math.floor(Math.min(window.innerWidth / colCount, window.innerHeight / rowCount));
 	const transform = context.getTransform();
 	context.translate(-colCount * size / 2, -rowCount * size / 2);
@@ -26,33 +32,38 @@ const draw = (context, grid, visited, path, frame) => {
 	context.fillStyle = "#FFF";
 	context.fillRect(0, 0, size * colCount, size * rowCount);
 
+	// Frontier path
+	context.fillStyle = "#009999";
+	for (let i = 0; i < frontier.length; i++) {
+		const [row, col] = frontier[i];
+		context.fillRect(col * size, row * size, size, size);
+	}
+
 	// Visited path
 	context.fillStyle = "#000099";
-	for (let i = 0; i < frame && i < visited.length; i++) {
+	for (let i = 0; i < visited.length; i++) {
 		const [row, col] = visited[i];
 		context.fillRect(col * size, row * size, size, size);
 	}
 
 	// Goal path
-	if (frame > visited.length) {
-		context.fillStyle = "#00FFFF";
-		for (let i = 0; i < frame - visited.length && i < path.length; i++) {
-			const [row, col] = path[i];
-			context.fillRect(col * size, row * size, size, size);
-		}
+	context.fillStyle = "#00FFFF";
+	for (let i = 0; i < path.length; i++) {
+		const [row, col] = path[i];
+		context.fillRect(col * size, row * size, size, size);
 	}
 
 	// Everything
 	for (let row = 0; row < rowCount; row++) {
 		for (let col = 0; col < colCount; col++) {
 			const cell = grid[row][col];
-			if (cell === WALL) {
+			if (cell === Cell.WALL) {
 				context.fillStyle = "#777";
 				context.fillRect(col * size, row * size, size, size);
-			} else if (cell === START) {
+			} else if (cell === Cell.START) {
 				context.fillStyle = "#FF00FF";
 				context.fillRect(col * size, row * size, size, size);
-			} else if (cell === END) {
+			} else if (cell === Cell.END) {
 				context.fillStyle = "#00FF00";
 				context.fillRect(col * size, row * size, size, size);
 			}
@@ -62,4 +73,4 @@ const draw = (context, grid, visited, path, frame) => {
 	context.setTransform(transform);
 };
 
-export { generate, draw };
+export { generate, draw, Cell };
