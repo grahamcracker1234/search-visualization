@@ -2,7 +2,7 @@ import { equal, Stack, Queue } from "./util.js";
 import { draw, Cell } from "./grid.js";
 
 const depthFirstSearch = async (grid, canvas) => {
-	const frontier = new Stack();
+	const frontier = Stack();
 	const start = find(grid, 2);
 	const goal = find(grid, 3);
 
@@ -30,7 +30,7 @@ const depthFirstSearch = async (grid, canvas) => {
 };
 
 const breadthFirstSearch = async (grid, canvas) => {
-	const frontier = new Queue();
+	const frontier = Queue();
 	const start = find(grid, Cell.START);
 	const goal = find(grid, Cell.END);
 

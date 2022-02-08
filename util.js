@@ -8,56 +8,30 @@ const wait = (millis) => {
 
 const equal = (obj1, obj2) => obj1[0] === obj2[0] && obj1[1] === obj2[1];
 
-class Stack {
-	constructor() {
-		this.stack = [];
-	}
+const Stack = () => {
+	let stack = [];
 
-	push(element) {
-		this.stack.push(element);
-	}
+	const push = (element) => stack.push(element);
+	const pop = () => stack.pop();
+	const clear = () => stack = [];
+	const isEmpty = () => stack.length === 0;
+	const toArray = () => stack;
+	const print = () => console.log(stack);
 
-	pop() {
-		return this.stack.pop();
-	}
+	return { push, pop, clear, isEmpty, toArray, print };
+};
 
-	isEmpty() {
-		return this.stack.length === 0;
-	}
+const Queue = () => {
+	let queue = [];
 
-	toArray() {
-		return this.stack;
-	}
+	const push = (element) => queue.splice(0,0, element);
+	const pop = () => queue.pop();
+	const clear = () => queue = [];
+	const isEmpty = () => queue.length === 0;
+	const toArray = () => queue;
+	const print = () => console.log(queue);
 
-	print() {
-		console.log(this.stack);
-	}
-}
-
-class Queue {
-	constructor() {
-		this.queue = [];
-	}
-
-	push(element) {
-		this.queue.splice(0, 0, element);
-	}
-
-	pop() {
-		return this.queue.pop();
-	}
-
-	isEmpty() {
-		return this.queue.length === 0;
-	}
-
-	toArray() {
-		return this.queue;
-	}
-
-	print() {
-		console.log(this.queue);
-	}
-}
+	return { push, pop, clear, isEmpty, toArray, print };
+};
 
 export { wait, equal, Stack, Queue };

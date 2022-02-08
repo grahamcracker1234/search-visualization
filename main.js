@@ -3,19 +3,27 @@ import { generate, draw } from "./grid.js";
 import { wait } from "./util.js";
 
 // eslint-disable-next-line no-unused-vars
-import { depthFirstSearch, breadthFirstSearch } from "./search.js";
+import { depthFirstSearch as dfs, breadthFirstSearch as bfs } from "./search.js";
 
 (async () => {
 	const canvas = Canvas();
 	const context = canvas.getContext("2d");
-	context.fillStyle = "#000";
+
+	canvas.style.opacity = 0;
+	canvas.style.transition = "opacity 1s ease-in";	
+
+	const black = "#000";
+	context.fillStyle = black;
 	context.fillRect(-canvas.width / 2, -canvas.height / 2, canvas.width, canvas.height);
+	document.body.style.background = black;
 
 	document.body.appendChild(canvas);
-	const grid = await generate("gridLayouts/4");
+	const grid = await generate("layouts/2");
 	draw(canvas, grid);
 
-	await wait(1000);
+	canvas.style.opacity = 1;
 
-	depthFirstSearch(grid, canvas);
+	await wait(2000);
+
+	bfs(grid, canvas);
 })();
