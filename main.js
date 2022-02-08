@@ -9,7 +9,9 @@ const start = async (canvas, search) => {
 	document.querySelector("#home").style.opacity = 0;
 
 	document.body.appendChild(canvas);
-	const grid = await generate("layouts/1");
+	const url = window.location.href;
+	const layout = parseInt(url[url.length - 1]) || 1;
+	const grid = await generate(`layouts/${layout}`);
 	draw(canvas, grid);
 
 	canvas.style.opacity = 1;
