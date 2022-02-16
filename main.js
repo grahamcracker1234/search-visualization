@@ -1,23 +1,22 @@
 import Canvas from "./canvas.js";
-import { generate, draw } from "./grid.js";
+import SearchAgent from "./searchAgent.js";
 import { wait } from "./util.js";
 
 // eslint-disable-next-line no-unused-vars
 import { depthFirstSearch as dfs, breadthFirstSearch as bfs } from "./search.js";
 
-const start = async (canvas, search) => {
+const start = async (canvas, searchFn) => {
 	document.querySelector("#home").style.opacity = 0;
 
 	document.body.appendChild(canvas);
-	const url = window.location.href;
-	const layout = parseInt(url[url.length - 1]) || 1;
-	const grid = await generate(`layouts/${layout}`);
-	draw(canvas, grid);
+
+	const searchAgent = await SearchAgent(canvas);
+	searchAgent.draw();
 
 	canvas.style.opacity = 1;
 	await wait(2000);
 
-	search(grid, canvas);
+	searchAgent.search(searchFn);
 };
 
 (async () => {

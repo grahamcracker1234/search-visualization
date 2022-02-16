@@ -1,10 +1,8 @@
-import { equal, Stack, Queue } from "./util.js";
-import { draw, Cell } from "./grid.js";
+import { equal, Stack, Queue, PriorityQueue } from "./util.js";
 
-const depthFirstSearch = async (grid, canvas) => {
+const depthFirstSearch = async (searchAgent) => {
 	const frontier = Stack();
-	const start = find(grid, 2);
-	const goal = find(grid, 3);
+	const start = searchAgent.getStartState();
 
 	frontier.push([start, []]);
 	const visited = [];
@@ -15,24 +13,22 @@ const depthFirstSearch = async (grid, canvas) => {
 		if (visited.find(pos => equal(pos, state))) continue;
 		visited.push(state);
 
-		if (equal(state, goal)) return draw(canvas, grid, frontierArray, visited, [...path, state]);
+		if (searchAgent.isGoalState(state)) return searchAgent.draw(frontierArray, visited, [...path, state]);
 
-		const neighbors = getNeighbors(grid, ...state);
-		for(const neighbor of neighbors) {
+		for(const neighbor of searchAgent.expand(state)) {
 			if (visited.find(pos => equal(pos, neighbor))) continue;
 			frontier.push([neighbor, [...path, state]]);
 		}
 		
 		// Draw the frame and then wait until the next animation frame
-		draw(canvas, grid, frontierArray, visited);
+		searchAgent.draw(frontierArray, visited);
 		await new Promise(requestAnimationFrame);
 	}
 };
 
-const breadthFirstSearch = async (grid, canvas) => {
+const breadthFirstSearch = async (searchAgent) => {
 	const frontier = Queue();
-	const start = find(grid, Cell.START);
-	const goal = find(grid, Cell.END);
+	const start = searchAgent.getStartState();
 
 	frontier.push([start, []]);
 	const visited = [];
@@ -43,45 +39,43 @@ const breadthFirstSearch = async (grid, canvas) => {
 		if (visited.find(pos => equal(pos, state))) continue;
 		visited.push(state);
 
-		if (equal(state, goal)) return draw(canvas, grid, frontierArray, visited, [...path, state]);
+		if (searchAgent.isGoalState(state)) return searchAgent.draw(frontierArray, visited, [...path, state]);
 
-		const neighbors = getNeighbors(grid, ...state);
-		for(const neighbor of neighbors) {
+		for(const neighbor of searchAgent.expand(state)) {
 			if (visited.find(pos => equal(pos, neighbor))) continue;
 			frontier.push([neighbor, [...path, state]]);
 		}
 
 		// Draw the frame and then wait until the next animation frame
-		draw(canvas, grid, frontierArray, visited);
+		searchAgent.draw(frontierArray, visited);
 		await new Promise(requestAnimationFrame);
 	}
 };
 
-const getNeighbors = (grid, row, col) => {
-	const cells = [];
-	const [rowCount, colCount] = [grid.length, grid[0].length];
+const aStarSearch = async (searchAgent, heuristic = () => 0) => {
+	const frontier = PriorityQueue();
+	const start = searchAgent.getStartState();
 
-	// Check up
-	if (row - 1 >= 0 && grid[row - 1][col] !== Cell.WALL) cells.push([row - 1, col]);
+	frontier.push([start, []], 0);
+	const visited = [];
+	while (!frontier.isEmpty()) {
+		const [state, path] = frontier.pop();
+		const frontierArray = frontier.toArray().map((entry) => entry[0]);
 
-	// Check down
-	if (row + 1 < rowCount && grid[row + 1][col] !== Cell.WALL) cells.push([row + 1, col]);
+		if (visited.find(pos => equal(pos, state))) continue;
+		visited.push(state);
 
-	// Check left
-	if (col - 1 >= 0 && grid[row][col - 1] !== Cell.WALL) cells.push([row, col - 1]);
+		if (searchAgent.isGoalState(state)) return searchAgent.draw(frontierArray, visited, [...path, state]);
 
-	// Check right
-	if (col + 1 < colCount && grid[row][col + 1] !== Cell.WALL) cells.push([row, col + 1]);
-
-	return cells;
-};
-
-const find = (matrix, state) => {
-	for(let row = 0; row < matrix.length; row++) {
-		for (let col = 0; col < matrix[row].length; col++) {
-			if (matrix[row][col] === state) return [row, col];
+		for(const neighbor of searchAgent.expand(state)) {
+			if (visited.find(pos => equal(pos, neighbor))) continue;
+			frontier.push([neighbor, [...path, state]], heuristic(state, searchAgent));
 		}
+
+		// Draw the frame and then wait until the next animation frame
+		searchAgent.draw(frontierArray, visited);
+		await new Promise(requestAnimationFrame);
 	}
 };
 
-export { depthFirstSearch, breadthFirstSearch };
+export { depthFirstSearch, breadthFirstSearch, aStarSearch };

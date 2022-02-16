@@ -1,6 +1,4 @@
-const wait = (millis) => {
-	return new Promise(resolve => setTimeout(resolve, millis));
-};
+const wait = (millis) => new Promise(resolve => setTimeout(resolve, millis));
 
 const equal = (obj1, obj2) => obj1[0] === obj2[0] && obj1[1] === obj2[1];
 
@@ -30,4 +28,29 @@ const Queue = () => {
 	return { push, pop, clear, isEmpty, toArray, print };
 };
 
-export { wait, equal, Stack, Queue };
+const PriorityQueue = () => {
+	let heap = [];
+
+	const push = (element, priority) => {
+		let queueElement = { element, priority };
+		let contain = false;
+		for (let i = 0; i < heap.length; i++) {
+			if (heap[i].priority <= priority) continue;
+				
+			heap.splice(i, 0, queueElement);
+			contain = true;
+			break;
+		}
+
+		if (!contain) heap.push(queueElement);
+	};
+	const pop = () => heap.shift();
+	const clear = () => heap = [];
+	const isEmpty = () => heap.length === 0;
+	const toArray = () => heap;
+	const print = () => console.log(heap);
+
+	return { push, pop, clear, isEmpty, toArray, print };
+};
+
+export { wait, equal, Stack, Queue, PriorityQueue };
