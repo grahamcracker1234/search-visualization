@@ -5,15 +5,13 @@ import { wait } from "./util.js";
 // eslint-disable-next-line no-unused-vars
 import { depthFirstSearch as dfs, breadthFirstSearch as bfs } from "./search.js";
 
-const start = async (canvas, searchFn) => {
+const start = async (searchAgent, searchFn) => {
+	const canvas = searchAgent.getCanvas();
+
+	canvas.style.visibility = "visible";
+	canvas.style.opacity = 1;
 	document.querySelector("#home").style.opacity = 0;
 
-	document.body.appendChild(canvas);
-
-	const searchAgent = await SearchAgent(canvas);
-	searchAgent.draw();
-
-	canvas.style.opacity = 1;
 	await wait(2000);
 
 	searchAgent.search(searchFn);
@@ -21,19 +19,18 @@ const start = async (canvas, searchFn) => {
 
 (async () => {
 	const canvas = Canvas();
-	const context = canvas.getContext("2d");
 
 	canvas.style.opacity = 0;
 	canvas.style.transition = "opacity 1s ease-in";	
 	canvas.style.position = "absolute";
 	canvas.style.top = 0;
 	canvas.style.bottom = 0;
+	canvas.style.visibility = "hidden";
 
-	const black = "#000";
-	context.fillStyle = black;
-	context.fillRect(-canvas.width / 2, -canvas.height / 2, canvas.width, canvas.height);
-	document.body.style.background = black;
+	document.body.appendChild(canvas);
+	const searchAgent = await SearchAgent(canvas);
+	searchAgent.draw();
 	
-	document.querySelector("#dfs").addEventListener("click", () => start(canvas, dfs));
-	document.querySelector("#bfs").addEventListener("click", () => start(canvas, bfs));
+	document.querySelector("#dfs").addEventListener("click", () => start(searchAgent, dfs));
+	document.querySelector("#bfs").addEventListener("click", () => start(searchAgent, bfs));
 })();
